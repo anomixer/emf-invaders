@@ -4,7 +4,29 @@ An emulator built with the EMF system, which aims to significantly lower the bar
 
 It does this by removing the complex code, providing instead a domain-specific language which describes the entire computer system, in XML. A builder program then translates this XML into source code, generating an emulator, assembler, and disassembler - all from the same originating file.
 
-See em.ulat.es for a full explanation and demo.
+## Features
+
+- **Multi-language Support**: English and Traditional Chinese interface
+- **Language Switching**: All pages provide en/tw language toggle buttons
+- **Audio System**: Fixed audio playback with local audio fallback support
+- **Complete Emulation**: Full Space Invaders arcade game emulation
+- **Development Tools**: Assembler, disassembler, and debugging tools
+
+## Usage
+
+1. Open `index.html` in your browser to start the game
+2. Use the language switch button to toggle between English and Traditional Chinese
+3. Press `C` to insert coin, `1` or `2` to start the game
+4. Use arrow keys to move and fire button to attack aliens
+
+## Technical Architecture
+
+- Built on EMF (Emulator Framework) system
+- Implemented in JavaScript
+- Supports HTML5 Canvas and Web Audio API
+- Responsive design supporting various screen sizes
+
+See [em.ulat.es](http://em.ulat.es) for a full explanation and demo.
 
 ---
 
