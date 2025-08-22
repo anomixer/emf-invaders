@@ -10,6 +10,7 @@ emf.audio = (function(bus, options) {
   let isRealTimeRunning = false;
   //
   let sampleList = [];
+  let localAudioElements = {}; // 本地音效元素
   //
   let toneList = [];
   let toneID = 1; // incrementing counter to produce unique IDs
@@ -149,21 +150,89 @@ emf.audio = (function(bus, options) {
   function sampleLoad(url) {
     let sample = {
       name: url,
-      id: sgx.audio.Engine.get().registerGlobalSound(url)
+      id: null
     };
+    
+    // 嘗試使用 SGX 引擎
+    try {
+      if (typeof sgx !== 'undefined' && sgx.audio && sgx.audio.Engine) {
+        sample.id = sgx.audio.Engine.get().registerGlobalSound(url);
+        sample.useSGX = true;
+      }
+    } catch (e) {
+      console.log('SGX 引擎不可用，使用本地音效系統');
+    }
+    
+    // 如果 SGX 不可用，創建本地音效元素
+    if (!sample.id) {
+      try {
+        let audioElement = new Audio(url);
+        audioElement.preload = 'auto';
+        sample.audioElement = audioElement;
+        sample.useSGX = false;
+        sample.id = 'local_' + url; // 本地 ID
+      } catch (e) {
+        console.log('無法載入音效檔案:', url, e);
+      }
+    }
+    
     sampleList.push(sample);
     return sample;
   }
 
   function samplePlay(ref) {
-    if (ref && ref.id) {
-      sgx.audio.Engine.get().playSound(ref.id);
+    if (!ref) return;
+    
+    if (ref.useSGX && ref.id) {
+      // 使用 SGX 引擎
+      try {
+        sgx.audio.Engine.get().playSound(ref.id);
+      } catch (e) {
+        console.log('SGX 播放失敗，嘗試本地播放');
+        playLocalAudio(ref);
+      }
+    } else {
+      // 使用本地音效
+      playLocalAudio(ref);
+    }
+  }
+
+  function playLocalAudio(ref) {
+    if (ref.audioElement) {
+      try {
+        // 確保 Audio Context 已啟動
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        
+        // 重置並播放音效
+        ref.audioElement.currentTime = 0;
+        ref.audioElement.volume = 0.5;
+        ref.audioElement.play().catch(function(error) {
+          console.log('播放音效失敗:', error);
+        });
+      } catch (e) {
+        console.log('本地音效播放失敗:', e);
+      }
     }
   }
 
   function sampleStop(ref) {
-    if (ref && ref.id) {
-      sgx.audio.Engine.get().stopSound(ref.id);
+    if (!ref) return;
+    
+    if (ref.useSGX && ref.id) {
+      try {
+        sgx.audio.Engine.get().stopSound(ref.id);
+      } catch (e) {
+        console.log('SGX 停止失敗');
+      }
+    } else if (ref.audioElement) {
+      try {
+        ref.audioElement.pause();
+        ref.audioElement.currentTime = 0;
+      } catch (e) {
+        console.log('本地音效停止失敗:', e);
+      }
     }
   }
 
@@ -234,6 +303,8 @@ emf.audio = (function(bus, options) {
     reset,
     muteAll,
     unmuteAll,
+    // Expose audioContext for external access
+    audioContext: audioContext,
   }
 });
 

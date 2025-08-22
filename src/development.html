@@ -37,7 +37,12 @@
                 </li>
 
                 <li class="nav-item"> 
-                    <a class="nav-link" href="#" onclick="menuAbout();">[About]<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#" onclick="menuAbout();"><span id="nav_about"></span><span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <button id="lang_switch" class="btn btn-outline-info btn-sm" onclick="switchLang()"></button>
                 </li>
             </ul>
         </div>
@@ -85,6 +90,30 @@
 <script type="text/javascript" src="js/arcade_invaders/keyboard.js"></script>
 <script type="text/javascript" src="js/arcade_invaders/memory.js"></script>
 <script type="text/javascript" src="js/arcade_invaders/vidint.js"></script>
+<script type="text/javascript" src="js/emf/lang.js"></script>
+
+    <script>
+    var currentLang = localStorage.getItem('lang') || 'en';
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      renderLang();
+    }
+    function switchLang() {
+      setLang(currentLang === 'en' ? 'tw' : 'en');
+    }
+    function renderLang() {
+      if (document.getElementById('nav_about')) {
+        document.getElementById('nav_about').innerText = LANG[currentLang].about;
+      }
+                     if (document.getElementById('lang_switch')) {
+          document.getElementById('lang_switch').innerText = currentLang === 'en' ? 'EN' : '繁中';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      renderLang();
+    });
+    </script>
 
     <script type="text/javascript" src="emf-2.0.min.js"></script>
     <script type="text/javascript" src="emulator-2.0.min.js"></script>
@@ -201,4 +230,24 @@
 </body>
 
 </html>
+
+<script>
+var currentLang = localStorage.getItem('lang') || 'en';
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  renderLang();
+}
+function switchLang() {
+  setLang(currentLang === 'en' ? 'tw' : 'en');
+}
+function renderLang() {
+  document.getElementById('nav_about').innerText = LANG[currentLang].about;
+  document.getElementById('lang_switch').innerText = LANG[currentLang][currentLang === 'en' ? 'lang_tw' : 'lang_en'];
+  // 其他 UI 文字依此類推
+}
+document.addEventListener('DOMContentLoaded', function() {
+  renderLang();
+});
+</script>
 

@@ -12,13 +12,27 @@ let arcade_invaders_iorq = (function(bus, options) {
   (function ctor() {
     audioHandler = new emf.audio(bus);
 
+    // 確保 Audio Context 已啟動
+    setTimeout(() => {
+      try {
+        let AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (audioHandler.audioContext && audioHandler.audioContext.state === 'suspended') {
+          audioHandler.audioContext.resume();
+        }
+      } catch (e) {
+        console.log('Audio Context 啟動失敗:', e);
+      }
+    }, 1000);
+
     // Samples taken from here:
     //   https://www.classicgaming.cc/classics/space-invaders/sounds
     for (let i = 0; i < 11; ++i) {
       try {
-        let fn = `res/sfx/sx${i}`;
+        let fn = `res/sfx/sx${i}.mp3`;
         sampleList[i] = audioHandler.sampleLoad(fn);
+        console.log('載入音效:', fn, sampleList[i]);
       } catch (e) {
+        console.log('無法載入音效檔案:', fn, e);
         // NOP - ignore this one, and move on
       }
     }

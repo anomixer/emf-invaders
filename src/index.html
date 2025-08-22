@@ -35,9 +35,10 @@
         <!-- Removed PHP link (not supported on static hosting) -->
 
                 <li class="nav-item"> 
-                    <a class="nav-link" href="#" onclick="menuAbout();">[About]<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#" onclick="menuAbout();"><span id="nav_about"></span><span class="sr-only">(current)</span></a>
                 </li>
             </ul>
+
         </div>
 
     </nav>
@@ -83,6 +84,117 @@
 <script type="text/javascript" src="js/arcade_invaders/keyboard.js"></script>
 <script type="text/javascript" src="js/arcade_invaders/memory.js"></script>
 <script type="text/javascript" src="js/arcade_invaders/vidint.js"></script>
+    <script type="text/javascript" src="js/emf/lang.js"></script>
+
+    <script>
+    var currentLang = localStorage.getItem('lang') || 'en';
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      renderLang();
+    }
+    function switchLang() {
+      setLang(currentLang === 'en' ? 'tw' : 'en');
+    }
+         function renderLang() {
+       if (document.getElementById('nav_about')) {
+         document.getElementById('nav_about').innerText = LANG[currentLang].about;
+       }
+               if (document.getElementById('lang_switch')) {
+          document.getElementById('lang_switch').innerText = currentLang === 'en' ? 'EN' : '繁中';
+        }
+       // 控制按鈕
+       if (document.getElementById('emf_run')) {
+         document.getElementById('emf_run').innerText = LANG[currentLang].start;
+       }
+       if (document.getElementById('emf_stop')) {
+         document.getElementById('emf_stop').innerText = LANG[currentLang].stop;
+       }
+       if (document.getElementById('emf_step')) {
+         document.getElementById('emf_step').innerText = LANG[currentLang].step;
+       }
+       if (document.getElementById('emf_reset')) {
+         document.getElementById('emf_reset').innerText = LANG[currentLang].reset;
+       }
+       if (document.getElementById('emf_export')) {
+         document.getElementById('emf_export').innerText = LANG[currentLang].export;
+       }
+       if (document.getElementById('emf_state')) {
+         document.getElementById('emf_state').innerText = LANG[currentLang].initialising;
+       }
+       // 提示文字
+       if (document.getElementById('tip_update')) {
+         document.getElementById('tip_update').innerText = LANG[currentLang].tip_update;
+       }
+       if (document.getElementById('tip_sound')) {
+         document.getElementById('tip_sound').innerText = LANG[currentLang].tip_sound;
+       }
+       // 遊戲標題和按鍵說明
+       if (document.getElementById('game_title')) {
+         document.getElementById('game_title').innerText = 'Space Invaders - Taito Corporation 1979';
+       }
+       if (document.getElementById('keys_title')) {
+         document.getElementById('keys_title').innerText = LANG[currentLang].keys;
+       }
+       if (document.getElementById('key_coin')) {
+         document.getElementById('key_coin').innerText = LANG[currentLang].insert_coin;
+       }
+       if (document.getElementById('key_p1_start')) {
+         document.getElementById('key_p1_start').innerText = LANG[currentLang].player1_start;
+       }
+       if (document.getElementById('key_p2_start')) {
+         document.getElementById('key_p2_start').innerText = LANG[currentLang].player2_start;
+       }
+       if (document.getElementById('key_left1')) {
+         document.getElementById('key_left1').innerText = LANG[currentLang].left1;
+       }
+       if (document.getElementById('key_right1')) {
+         document.getElementById('key_right1').innerText = LANG[currentLang].right1;
+       }
+       if (document.getElementById('key_fire1')) {
+         document.getElementById('key_fire1').innerText = LANG[currentLang].fire1;
+       }
+       if (document.getElementById('key_left2')) {
+         document.getElementById('key_left2').innerText = LANG[currentLang].left2;
+       }
+       if (document.getElementById('key_right2')) {
+         document.getElementById('key_right2').innerText = LANG[currentLang].right2;
+       }
+       if (document.getElementById('key_fire2')) {
+         document.getElementById('key_fire2').innerText = LANG[currentLang].fire2;
+       }
+       // About 對話框
+       if (document.getElementById('modal_about_title')) {
+         document.getElementById('modal_about_title').innerText = LANG[currentLang].about;
+       }
+       if (document.getElementById('about_p1')) {
+         document.getElementById('about_p1').innerText = LANG[currentLang].about_p1;
+       }
+       if (document.getElementById('about_p2')) {
+         document.getElementById('about_p2').innerText = LANG[currentLang].about_p2;
+       }
+       if (document.getElementById('about_p3')) {
+         document.getElementById('about_p3').innerText = LANG[currentLang].about_p3;
+       }
+       if (document.getElementById('about_p4')) {
+         document.getElementById('about_p4').innerText = LANG[currentLang].about_p4;
+       }
+       if (document.getElementById('about_copyright')) {
+         document.getElementById('about_copyright').innerText = LANG[currentLang].about_copyright;
+       }
+               if (document.getElementById('modal_close')) {
+          document.getElementById('modal_close').innerText = LANG[currentLang].close;
+        }
+        if (document.getElementById('update_text')) {
+          document.getElementById('update_text').innerText = LANG[currentLang].update;
+        }
+     }
+         
+     
+     document.addEventListener('DOMContentLoaded', function() {
+       renderLang();
+     });
+    </script>
 
     <script type="text/javascript" src="emf-2.0.min.js"></script>
     <script type="text/javascript" src="emulator-2.0.min.js"></script>
@@ -95,31 +207,31 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">About</h5>
+                    <h5 class="modal-title" id="modal_about_title">About</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>
+                    <p id="about_p1">
                         This emulator was built using the EMF system, designed and implemented by Steven Goodwin, between 2011 and 2020.
                     </p>
-                    <p>
+                    <p id="about_p2">
                         First, the machine is defined with a custom description language. Each component part, along with its interactives, it's explained in a human-friendly, and machine-readable, format.
                     </p>
-                    <p>
+                    <p id="about_p3">
                         Then, this description is processed to generate an emulator, assembler, and dissembler for the machine in question. This can be in any language, but is currently targetted to JavaScript.
                     </p>
-                    <p>
+                    <p id="about_p4">
                         Finally, these files are glued into the JavaScript EMF framework, which handles the UI-specific components.
                     </p>
                    <!-- INCLUDE:COPYRIGHT -->
-                    <p>
+                    <p id="about_copyright">
                       EMF is Copyright by Steven Goodwin, 2011-2020. All rights reserved.
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modal_close">Close</button>
                 </div>
             </div>
         </div>
@@ -150,9 +262,9 @@
                 </div>
             </div>
             <div class="col-12 col-md-8 ">
-                <div id="emf_state">Initialising</div><br>
-                <div>TIP: Untick the 'Update' option to improve performance</div><br>
-                <div>TIP: Some browsers require human interaction before they play sound. So try clicking, and refreshing the page, if you hear nothing</div><br>
+                                 <div id="emf_state">Initialising</div><br>
+                 <div id="tip_update">TIP: Untick the 'Update' option to improve performance</div><br>
+                 <div id="tip_sound">TIP: Some browsers require human interaction before they play sound. So try clicking, and refreshing the page, if you hear nothing</div><br>
                 <div class="btn-group" role="group" aria-label="Control">
                    <a href="#" class="btn btn-outline-success my-2 my-sm-0" id= "emf_run">Start</a>
                    <a href="#" class="btn btn-outline-success my-2 my-sm-0" id= "emf_stop">Stop</a>
@@ -163,9 +275,12 @@
 
                 <!-- INCLUDE:CONTROLS -->
 
-                <div class="btn-group">
-                    <label class="btn btn-secondary active"><input id="opt_auto_update" type="checkbox" autocomplete="off" checked> Update</label>
-                </div>
+                                 <div class="btn-group">
+                     <label class="btn btn-secondary active"><input id="opt_auto_update" type="checkbox" autocomplete="off" checked> <span id="update_text">Update</span></label>
+                 </div>
+                 <div class="btn-group ml-2">
+                     <button id="lang_switch" class="btn btn-outline-info btn-sm" onclick="switchLang()"></button>
+                 </div>
 
             </div>
           </div>
@@ -178,19 +293,19 @@
                 </div>
             </div>
             <div class="col-12 col-md-8 ">
-                <!-- INCLUDE:BANNER -->
-	<b>Space Invaders - Taito Corporation 1979</b>
-	<p>Keys:
+                                 <!-- INCLUDE:BANNER -->
+	<b id="game_title">Space Invaders - Taito Corporation 1979</b>
+	<p id="keys_title">Keys:
 		<ul>
-	      <li>C : Insert coin</li>
-	      <li>1 : Player 1 start</li>
-	      <li>2 : Player 2 start</li>
-	      <li>Z : Left (player 1)</li>
-	      <li>X : Right (player 1)</li>
-	      <li>. : Fire (player 1)</li>
-	      <li>A : Left (player 2)</li>
-	      <li>S : Right (player 2)</li>
-	      <li>L : Fire (player 2)</li>
+	      <li id="key_coin">C : Insert coin</li>
+	      <li id="key_p1_start">1 : Player 1 start</li>
+	      <li id="key_p2_start">2 : Player 2 start</li>
+	      <li id="key_left1">Z : Left (player 1)</li>
+	      <li id="key_right1">X : Right (player 1)</li>
+	      <li id="key_fire1">. : Fire (player 1)</li>
+	      <li id="key_left2">A : Left (player 2)</li>
+	      <li id="key_right2">S : Right (player 2)</li>
+	      <li id="key_fire2">L : Fire (player 2)</li>
 	    </ul>
 		</p>
 </div>
@@ -203,7 +318,6 @@
     </div>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
 </body>
 
 </html>
