@@ -179,21 +179,6 @@
             </div>
             <div class="col-12 col-md-8 ">
                 <!-- INCLUDE:BANNER -->
-	<b>Space Invaders - Taito Corporation 1979</b>
-	<p>Keys:
-		<ul>
-	      <li>C : Insert coin</li>
-	      <li>1 : Player 1 start</li>
-	      <li>2 : Player 2 start</li>
-	      <li>Z : Left (player 1)</li>
-	      <li>X : Right (player 1)</li>
-	      <li>. : Fire (player 1)</li>
-	      <li>A : Left (player 2)</li>
-	      <li>S : Right (player 2)</li>
-	      <li>L : Fire (player 2)</li>
-	    </ul>
-		</p>
-</div>
             </div>
          </div>
 
